@@ -1,9 +1,10 @@
 {
-  "name": "hackathon-starter",
-  "version": "4.2.1",
+  "name": "backstab",
+  "version": "1.0.0",
+  "description": "feedback web application",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/mostley/backstab.git"
   },
   "scripts": {
     "start": "node app.js",

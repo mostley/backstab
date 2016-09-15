@@ -1,0 +1,11 @@
+services:
+  backstab-web:
+    image: 'mostley/backstab'
+    ports:
+      - "3000:3000"
+    volumes:
+      - backstab-uploads:/usr/src/app/uploads
+    links:
+      - backstab-db:mongo
+  backstab-db:
+    image: 'mongo'

@@ -1,15 +1,18 @@
 extends layout
 
 block content
-  h1 Hackathon Starter
-  p.lead A boilerplate for Node.js web applications.
+  h1 Backstab Us
+  p.lead Finally tell us what you really hate about our stuff or figure out what others hate about yours.
   hr
   .row
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
+    .col-sm-12
+      div.input-group
+        input.search-query.form-control.input-lg(placeholder='Search for a site')
+        span.input-group-btn
+          button.btn.btn-info.btn-lg(type='button')
+            i.fa.fa-search
+  hr
+  .row
     .col-sm-6
       h2 Heading
       p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
