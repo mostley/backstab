@@ -161,7 +161,7 @@ function sendPost(url, data, callback) {
         callback(err);
       }
   }
-  http.send(data);
+  http.send(JSON.stringify(data));
 }
 
 function showMessage(msg, className) {
