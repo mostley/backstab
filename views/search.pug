@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Backstab Us
+  p.lead Finally tell us what you really hate about our stuff or figure out what others hate about yours.
+  hr
+  .row
+    .col-sm-12
+      include partials/searchbox
+  hr
+  .row
+    .col-sm-12
+      ul.list-group
+        each site in sites
+          a.list-group-item.selectable-list-item(href='/site/' + site.name)  #{site.name}
+            span.badge.pull-xs-right #{site.backstabbed}

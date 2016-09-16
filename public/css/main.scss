@@ -69,3 +69,11 @@ textarea {
 .fa {
   margin-right: 6px;
 }
+
+// Control stuff
+// -------------------------
+
+.selectable-list-item:hover {
+  background-color: #eee;
+  cursor: pointer;
+}

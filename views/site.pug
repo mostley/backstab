@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 #{title}
+  .row
+    .col-sm-6
+      p.lead What people think about this page
+    .col-sm-6
+      button.pull-right Backstab this site!
+
+  .row
+    .col-sm-12
+      ul.list-group
+        each critic in critics
+          li.list-group-item
+            span.tag.tag-default.tag-pill.pull-xs-right #{critic.text}
