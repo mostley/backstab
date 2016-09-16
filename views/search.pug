@@ -10,7 +10,10 @@ block content
   hr
   .row
     .col-sm-12
-      ul.list-group
-        each site in sites
-          a.list-group-item.selectable-list-item(href='/site/' + site.name)  #{site.name}
-            span.badge.pull-xs-right #{site.backstabbed}
+      if sites.length > 0
+        ul.list-group
+          each site in sites
+            a.list-group-item.selectable-list-item(href='/site/' + site.url)  #{site.url}
+              span.badge.pull-xs-right #{site.blerpCount}
+      else
+        div.alert.alert-info Wow, no one dared to backstab you yet.

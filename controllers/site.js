@@ -1,3 +1,7 @@
+'use strict';
+
+const Site = require('../models/Site');
+
 /**
  * GET /site/<sitename>
  */
