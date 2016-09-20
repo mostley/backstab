@@ -1,6 +1,6 @@
 form.input-group.search-query-form(action='/search', method='POST')
   input(type='hidden', name='_csrf', value=_csrf)
-  input.search-query.form-control.input-lg(placeholder='Search for a site', name='query')
+  input.search-query.form-control.input-lg(placeholder='Search for a site', name='query', value=query)
   span.input-group-btn
     button.btn.btn-info.btn-lg(type='submit')
       i.fa.fa-search

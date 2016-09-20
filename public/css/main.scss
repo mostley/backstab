@@ -77,3 +77,12 @@ textarea {
   background-color: #eee;
   cursor: pointer;
 }
+
+.short-stab {
+  max-height: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+}

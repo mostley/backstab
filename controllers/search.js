@@ -27,7 +27,7 @@ exports.index = (req, res) => {
 
     res.render('search', {
       title: 'Search - ' + query,
-      sites: docs.map(site => { return { url: site.url, blerpCount: site.blerps.length }; }),
+      sites: docs.map(site => { return { url: site.url, stabCount: site.stabs.length }; }),
       query: query
     });
   });

@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 const siteSchema = new mongoose.Schema({
   url: String,
-  blerps: Array
+  stabs: Array,
+  created: Date
 });
 
 const Site = mongoose.model('Site', siteSchema);

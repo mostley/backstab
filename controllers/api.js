@@ -1,10 +1,13 @@
 'use strict';
+
 const _ = require('lodash');
 const async = require('async');
 const validator = require('validator');
 const request = require('request');
 const cheerio = require('cheerio');
 const Github = require('github-api');
+
+const Site = require('../models/Site');
 
 /**
  * GET /api/scraping
@@ -52,18 +55,65 @@ exports.getAviary = (req, res) => {
   });
 };
 
-/**
- * GET /api/upload
- * File Upload API example.
- */
+exports.backstabSite = (req, res, next) => {
+  var sitename = unescape(req.body.sitename);
+  var wasInPage = req.body.inPage;
 
-exports.getFileUpload = (req, res, next) => {
-  res.render('api/upload', {
-    title: 'File Upload'
+  if (!req.body.text || !req.file) {
+    if (wasInPage) {
+      req.flash('errors', { msg: 'Nope, didn\'t work.' });
+      res.redirect('/sites/' + sitename);
+    } else {
+      res.sendStatus(400);
+    }
+    return;
+  }
+
+  var stab = {
+    id: req.file.filename,
+    text: unescape(req.body.text),
+    shot: req.file.filename,
+    created: new Date()
+  };
+
+  saveStab(sitename, stab, err => {
+    if (err) {
+      console.error(err);
+
+      if (wasInPage) {
+        req.flash('error', { msg: 'Site was not successfully backstabbed.' });
+        res.redirect('/sites/' + sitename);
+      } else {
+        res.sendStatus(500);
+      }
+      return;
+    }
+
+    if (wasInPage) {
+      req.flash('success', { msg: 'Site was successfully backstabbed.' });
+      res.redirect('/sites/' + sitename);
+    } else {
+      res.sendStatus(200);
+    }
   });
 };
 
-exports.postFileUpload = (req, res, next) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  res.redirect('/api/upload');
-};
+function saveStab(sitename, stab, next) {
+  Site.findOne({ url: sitename }, (err, site) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    if (!site) {
+      site = new Site({
+        url: sitename,
+        stabs: [stab]
+      });
+    } else {
+      site.stabs.push(stab);
+    }
+
+    site.save(next);
+  });
+}

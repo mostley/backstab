@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  h1 #{title}
+  .row
+    if site && stab
+      .col-sm-12
+        p.lead What somebody thought about this
+
+  if site
+    if stab
+      .row
+        .col-sm-12
+          .thumbnail.text-left.img-thumbnail.col-md-6
+            if stab.shot
+              a(data-toggle='lightbox', href='/screenshot/' + stab.shot, data-title='Screenshot', data-type='image')
+                img(src='/screenshot/' + stab.shot, alt='Click to magnify')
+            else
+              img(src='http://placehold.it/350x150?text=<here could be your screenshot>', alt='Screenshot placeholder')
+          .col-md-6
+            p #{stab.text}
+      .row
+        .col-sm-12
+          #disqus_thread
+          script.
+            (function() {
+              var disqus_config = function () {
+                  this.page.url = 'http://backstab.us/';
+                  this.page.identifier = '#{sitename + '_' + stab.id}';
+              };
+              var d = document, s = d.createElement('script');
+              s.src = '//backstab.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+    else
+      a.btn.btn-primary(href='/sites/' + sitename) Back
+  else
+    a.btn.btn-default.btn-lg(href='/search/' + sitename) Search for it

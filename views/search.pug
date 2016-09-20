@@ -2,7 +2,6 @@ extends layout
 
 block content
   h1 Backstab Us
-  p.lead Finally tell us what you really hate about our stuff or figure out what others hate about yours.
   hr
   .row
     .col-sm-12
@@ -13,7 +12,8 @@ block content
       if sites.length > 0
         ul.list-group
           each site in sites
-            a.list-group-item.selectable-list-item(href='/site/' + site.url)  #{site.url}
-              span.badge.pull-xs-right #{site.blerpCount}
+            a.list-group-item.selectable-list-item(href='/sites/' + site.url)  #{site.url}
+              span.badge.pull-xs-right stabbed #{site.stabCount} times
       else
-        div.alert.alert-info Wow, no one dared to backstab you yet.
+        div.alert.alert-info Wow, no one dared to backstab that yet.
+        a.btn.btn-default.btn-lg(href='/sites/' + query + '/backstab') Do it now!

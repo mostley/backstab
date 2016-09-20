@@ -2,25 +2,27 @@ extends layout
 
 block content
   h1 Backstab Us
-  p.lead Finally tell us what you really hate about our stuff or figure out what others hate about yours.
+  p.lead Finally tell us what you really hate about our stuff or figure out why others don't like yours.
   hr
   .row
     .col-sm-12
       include partials/searchbox
   hr
   .row
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
+    each site in mostStabbed
+      - var stabIndex = Math.floor(Math.random() * site.stabs.length)
+      .col-sm-6
+        a.text-muted(href='/sites/' + site.url)
+          h2 #{site.url} was stabbed #{site.stabs.length} times
+        .row
+          if site.stabs[stabIndex].shot
+            .col-sm-4
+              .thumbnail
+                img(src='/screenshot/' + site.stabs[stabIndex].shot)
+            .col-sm-8
+              p.short-stab(title=site.stabs[stabIndex].text) #{site.stabs[stabIndex].text}
+              p: a.btn.btn-default(href='/sites/' + site.url, role='button') View the gruelsome details »
+          else
+            .col-sm-12
+              p.short-stab #{site.stabs[stabIndex].text}
+              p: a.btn.btn-default(href='/sites/' + site.url, role='button') View the gruelsome details »

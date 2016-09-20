@@ -3,14 +3,32 @@ extends layout
 block content
   h1 #{title}
   .row
-    .col-sm-6
-      p.lead What people think about this page
-    .col-sm-6
-      button.pull-right Backstab this site!
-
+    if site
+      .col-sm-6
+        p.lead What people think about this page
+      .col-sm-6
+        if site.stabs.length <= 0
+          a.btn.btn-default.pull-right(href='/sites/' + sitename + '/backstab') Stab this!
+        else
+          a.btn.btn-default.pull-right(href='/sites/' + sitename + '/backstab') Stab this some more!
+  hr
   .row
     .col-sm-12
-      ul.list-group
-        each critic in critics
-          li.list-group-item
-            span.tag.tag-default.tag-pill.pull-xs-right #{critic.text}
+      if site
+        if site.stabs.length > 0
+          each stab in site.stabs
+            .col-sm-6.col-md-4
+              .thumbnail
+                if stab.shot
+                  a(data-toggle='lightbox', href='/screenshot/' + stab.shot, data-title='Screenshot', data-type='image')
+                    img(src='/screenshot/' + stab.shot, alt='Click to magnify')
+                else
+                  img(src='http://placehold.it/350x150?text=<here could be your screenshot>', alt='Screenshot placeholder')
+                .caption
+                  h4.short-stab(title=stab.text) #{stab.text}
+                  hr
+                  a.btn.btn-primary(href='/sites/' + sitename + '/stabs/' + stab.id, role='button') Stab the stabber!
+        else
+          no stabs yet
+      else
+        a.btn.btn-default.btn-lg(href='/search/' + sitename) Search for it

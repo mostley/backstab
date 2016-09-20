@@ -19,6 +19,8 @@ const expressValidator = require('express-validator');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const adaptiveImages = require('express-adaptive-images');
+const cookieParser = require('cookie-parser');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -51,7 +53,7 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
- console.log('Connecting to ' + (process.env.MONGODB_URI || process.env.MONGOLAB_URI));
+console.log('Connecting to ' + (process.env.MONGODB_URI || process.env.MONGOLAB_URI));
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on('connected', () => {
   console.log('%s MongoDB connection established!', chalk.green('✓'));
@@ -75,6 +77,7 @@ app.use(sass({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -89,7 +92,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.path === '/api/sites' || req.path === '/api/backstab') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -112,6 +115,8 @@ app.use(function(req, res, next) {
   }
   next();
 });
+app.use('/screenshot', adaptiveImages(path.join(__dirname, 'uploads')));
+app.use('/screenshot', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 /**
@@ -120,7 +125,9 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 app.get('/', homeController.index);
 app.get('/search/:query', searchController.index);
 app.post('/search', searchController.goToIndex);
-app.get('/site/:sitename', siteController.index);
+app.get('/sites/:sitename', siteController.index);
+app.get('/sites/:sitename/stabs/:stabid', siteController.getStab);
+app.get('/sites/:sitename/backstab', siteController.backstab);
 
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
@@ -140,12 +147,12 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 /**
- * API examples routes.
+ * API routes.
  */
 app.get('/api/scraping', apiController.getScraping);
 app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
-app.get('/api/upload', apiController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+app.post('/api/sites', upload.single('shot'), apiController.backstabSite);
+app.post('/api/backstab', upload.single('shot'), apiController.backstabSite);
 
 /**
  * OAuth authentication routes. (Sign in)

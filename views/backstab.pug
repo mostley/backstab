@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1 #{title}
+  .row
+    .col-sm-6
+      p.lead Backstab '#{sitename}' viciously
+
+  .row
+    .col-sm-12
+      .well
+        form.form-horizontal(action='/api/sites', method='POST', enctype='multipart/form-data')
+          input(type='hidden', name='_csrf', value=_csrf)
+          input(type='hidden', name='sitename', value=sitename)
+          input(type='hidden', name='inPage', value='true')
+
+          .form-group
+            label.col-sm-2.control-label(for='screenshotFileUploadField') Screenshot upload
+            .col-sm-10
+              input(type='file', id='screenshotFileUploadField', name='shot')
+
+          .form-group
+            label.col-sm-2.control-label(for='textField') Crazy rant
+            .col-sm-10
+              textarea.form-control(id='textField', name='text', rows=3)
+
+          .form-group
+            .col-sm-offset-2.col-sm-10
+              button.btn.btn-default.btn-lg(type='submit') Stab!
+
+          .clearfix
