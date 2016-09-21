@@ -34,3 +34,13 @@ exports.index = (req, res) => {
       });
     });
 };
+
+/**
+ * GET /backstab/<url>
+ */
+exports.backstabUrl = (req, res) => {
+  res.render('frame', {
+    title: 'Backstab',
+    url: req.params.url
+  })
+};

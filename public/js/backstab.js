@@ -110,6 +110,7 @@ function addStyles() {
       'right: 10px;',
       'bottom: 10px;',
       'color: black;',
+      'cursor: pointer;',
     '}',
     '#backstab-container .backstab-text {',
       'width: 220px;',
@@ -138,8 +139,8 @@ function addStyles() {
       'background-color: #999;',
       'color: #fff;',
       'font-size: 20px;',
-      'animation: backstab-glow 2s infinite alternate',
-      'cursor: pointer',
+      'animation: backstab-glow 2s infinite alternate;',
+      'cursor: pointer;',
     '}',
     '#backstab-trigger:hover {',
       'background-color: #aaa;',
@@ -240,7 +241,7 @@ function sendBackstab() {
           console.error(err);
           showMessage('Failed to backstab', 'backstab-alert');
         } else {
-          showMessage('Successfully backstabbed!', 'backstab-success');
+          showMessage('Successfully backstabbed! <br/>How could you?"', 'backstab-success');
         }
 
         document.getElementById('backstab-container').remove();

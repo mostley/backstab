@@ -128,6 +128,7 @@ app.post('/search', searchController.goToIndex);
 app.get('/sites/:sitename', siteController.index);
 app.get('/sites/:sitename/stabs/:stabid', siteController.getStab);
 app.get('/sites/:sitename/backstab', siteController.backstab);
+app.get('/backstab/:url', homeController.backstabUrl);
 
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
