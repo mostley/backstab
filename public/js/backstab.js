@@ -16,68 +16,8 @@
 
 
 var backstabUrl = 'http://backstab.us/api/sites';
+var backstabSitesUrl = 'http://backstab.us/sites/';
 var backstabFrameUrlRoot = 'http://backstab.us/backstab/';
-
-if (!('sendAsBinary' in XMLHttpRequest.prototype)) {
-  XMLHttpRequest.prototype.sendAsBinary = function(string) {
-    var bytes = Array.prototype.map.call(string, function(c) {
-      return c.charCodeAt(0) & 0xff;
-    });
-    this.send(new Uint8Array(bytes).buffer);
-  };
-}
-
-function postCanvasToURL(url, canvas, text, callback) {
-  var data = canvas.toDataURL('image/png');
-  data = data.replace('data:image/png;base64,', '');
-
-  var siteUrl = window.location.href;
-  if (siteUrl.indexOf(backstabFrameUrlRoot) === 0) {
-    siteUrl = siteUrl.substr(backstabFrameUrlRoot.length);
-  } else {
-    siteUrl = escape(siteUrl);
-  }
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url, true);
-  var boundary = 'ohaiimaboundary';
-  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
-  xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        var err = null;
-        if (xhr.status !== 200) {
-          err = 'failed';
-        }
-
-        callback(err);
-      }
-  };
-  xhr.sendAsBinary([
-    '--' + boundary,
-    'Content-Disposition: form-data; name="text"',
-    'Content-Type: text/plain',
-    '',
-    escape(text),
-    '--' + boundary,
-    'Content-Disposition: form-data; name="sitename"',
-    'Content-Type: text/plain',
-    '',
-    siteUrl,
-    '--' + boundary,
-    'Content-Disposition: form-data; name="shot"; filename="screenshot.png"',
-    'Content-Type: image/png',
-    '',
-    atob(data),
-    '--' + boundary + '--'
-  ].join('\r\n'));
-}
-
-function sendPost(url, data, callback) {
-  var http = new XMLHttpRequest();
-  http.open("POST", url, true);
-  http.setRequestHeader("Content-type", "application/json");
-  http.send(JSON.stringify(data));
-}
 
 function addStyles() {
   var styleElement = document.createElement('style');
@@ -158,7 +98,7 @@ function addStyles() {
     '.backstab-message {',
       'position: absolute;',
       'right: 20px;',
-      'bottom: 100px;',
+      'bottom: 150px;',
       'width: 250px;',
       'height: auto;',
       'padding: 10px;',
@@ -182,6 +122,69 @@ function addStyles() {
     '@keyframes backstab-glow { 0% { box-shadow: 0 0 10px black; } 100% { box-shadow: 0 0 0px black;  } }'
   ].join('\n');
   document.head.appendChild(styleElement);
+}
+
+if (!('sendAsBinary' in XMLHttpRequest.prototype)) {
+  XMLHttpRequest.prototype.sendAsBinary = function(string) {
+    var bytes = Array.prototype.map.call(string, function(c) {
+      return c.charCodeAt(0) & 0xff;
+    });
+    this.send(new Uint8Array(bytes).buffer);
+  };
+}
+
+function postCanvasToURL(url, canvas, text, callback) {
+  var data = canvas.toDataURL('image/png');
+  data = data.replace('data:image/png;base64,', '');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  var boundary = 'ohaiimaboundary';
+  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        var err = null;
+        if (xhr.status !== 200) {
+          err = 'failed';
+        }
+
+        callback(err);
+      }
+  };
+  xhr.sendAsBinary([
+    '--' + boundary,
+    'Content-Disposition: form-data; name="text"',
+    'Content-Type: text/plain',
+    '',
+    escape(text),
+    '--' + boundary,
+    'Content-Disposition: form-data; name="sitename"',
+    'Content-Type: text/plain',
+    '',
+    encodeURI(getSiteName()),
+    '--' + boundary,
+    'Content-Disposition: form-data; name="shot"; filename="screenshot.png"',
+    'Content-Type: image/png',
+    '',
+    atob(data),
+    '--' + boundary + '--'
+  ].join('\r\n'));
+}
+
+function getSiteName() {
+  var siteUrl = window.location.href;
+  if (siteUrl.indexOf(backstabFrameUrlRoot) === 0) {
+    siteUrl = decodeURIComponent(siteUrl.substr(backstabFrameUrlRoot.length));
+  }
+
+  return siteUrl;
+}
+
+function sendPost(url, data, callback) {
+  var http = new XMLHttpRequest();
+  http.open("POST", url, true);
+  http.setRequestHeader("Content-type", "application/json");
+  http.send(JSON.stringify(data));
 }
 
 function addElem(tag, className, parent, content) {
@@ -228,7 +231,7 @@ function createBackstabTrigger() {
   });
 }
 
-function showMessage(msg, className) {
+function showMessage(msg, className, timeout) {
   var messageElement = addElem('div', 'backstab-message backstab-hide ' + className, document.body, msg);
   window.setTimeout(function() {
     messageElement.className = messageElement.className.replace('backstab-hide', '');
@@ -238,23 +241,24 @@ function showMessage(msg, className) {
       window.setTimeout(function() {
         messageElement.remove();
       }, 1000);
-    }, 1000);
+    }, timeout || 1000);
   }, 100);
 }
 
 function sendBackstab() {
+  var backstabText = document.getElementById('backstab-text').value;
+  document.getElementById('backstab-container').remove();
+
   html2canvas(document.body, {
     onrendered: function(canvas) {
-      var backstabText = document.getElementById('backstab-text');
-      postCanvasToURL(backstabUrl, canvas, backstabText.value, function(err) {
+      postCanvasToURL(backstabUrl, canvas, backstabText, function(err) {
         if (err) {
           console.error(err);
           showMessage('Failed to backstab', 'backstab-alert');
         } else {
-          showMessage('Successfully backstabbed! <br/>How could you?"', 'backstab-success');
+          showMessage('Successfully backstabbed! <br/><a href="' + backstabSitesUrl + encodeURIComponent(getSiteName()) + '">Show me!</a>', 'backstab-success', 10000);
         }
 
-        document.getElementById('backstab-container').remove();
         createBackstabTrigger();
       });
     }
