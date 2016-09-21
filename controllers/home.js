@@ -41,6 +41,6 @@ exports.index = (req, res) => {
 exports.backstabUrl = (req, res) => {
   res.render('frame', {
     title: 'Backstab',
-    url: req.params.url
+    url: decodeURIComponent(req.params.url)
   })
 };

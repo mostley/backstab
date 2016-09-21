@@ -6,7 +6,7 @@ const Site = require('../models/Site');
  * GET /site/<sitename>
  */
 exports.index = (req, res) => {
-  var sitename = req.params.sitename;
+  var sitename = decodeURIComponent(req.params.sitename);
   Site.findOne({ url: sitename }, (err, site) => {
     if (err || !site) {
       console.error(err);
@@ -32,8 +32,8 @@ exports.index = (req, res) => {
  * GET /site/<sitename>/stabs/<stabid>
  */
 exports.getStab = (req, res) => {
-  var sitename = req.params.sitename;
-  var stabid = req.params.stabid;
+  var sitename = decodeURIComponent(req.params.sitename);
+  var stabid = decodeURIComponent(req.params.stabid);
 
   Site.findOne({ url: sitename }, (err, site) => {
     if (err) {
@@ -89,7 +89,7 @@ exports.getStab = (req, res) => {
  */
 exports.backstab = (req, res) => {
   res.render('backstab', {
-    title: 'Site - ' + req.params.sitename,
-    sitename: req.params.sitename
+    title: 'Site - ' + decodeURIComponent(req.params.sitename),
+    sitename: decodeURIComponent(req.params.sitename)
   });
 };

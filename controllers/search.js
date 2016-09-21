@@ -6,7 +6,7 @@ const Site = require('../models/Site');
  * GET /search/<sitename>
  */
 exports.index = (req, res) => {
-  var query = req.params.query;
+  var query = decodeURIComponent(req.params.query);
 
   Site.find({ url: new RegExp('^.*' + query + '.*$', "i") }, (err, docs) => {
     if (err) {

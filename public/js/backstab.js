@@ -94,6 +94,7 @@ function addStyles() {
       'margin: 0.67em 0;',
       'box-sizing: border-box;',
       'color: #fff;',
+      'text-shadow: none;',
     '}',
     '#backstab-container button.backstab-close {',
       'position: absolute;',

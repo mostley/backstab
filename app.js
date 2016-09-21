@@ -21,6 +21,7 @@ const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 const adaptiveImages = require('express-adaptive-images');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -152,7 +153,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  */
 app.get('/api/scraping', apiController.getScraping);
 app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
-app.post('/api/sites', upload.single('shot'), apiController.backstabSite);
+app.post('/api/sites', cors(), upload.single('shot'), apiController.backstabSite);
 app.post('/api/backstab', upload.single('shot'), apiController.backstabSite);
 
 /**
