@@ -2,11 +2,16 @@ extends layout
 
 block content
   h1 Backstab Us
-  p.lead Finally tell us what you really hate about our stuff or figure out why others don't like yours.
-  hr
   .row
     .col-sm-12
+      p.lead Finally tell us what you really hate about our stuff or figure out why others don't like yours.
+  hr
+  .row
+    .col-sm-10
       include partials/searchbox
+    .col-sm-2
+      a.btn.btn-default(href='javascript:' + bookmarkletcode) + Backstab
+      p.help-block Use this handy Bookmarklet to get your backstabbing on
   hr
   .row
     each site in mostStabbed

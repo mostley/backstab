@@ -1,6 +1,16 @@
 'use strict';
 
+const uglifyJS = require('uglify-js');
 const Site = require('../models/Site');
+
+var bookmarklet = uglifyJS.minify([ "public/js/bookmarkletcode.js"], {
+    compress: {
+        dead_code: true,
+        global_defs: {
+            DEBUG: false
+        }
+    }
+});
 
 /**
  * GET /
@@ -19,7 +29,8 @@ exports.index = (req, res) => {
 
       res.render('home', {
         title: 'Home',
-        mostStabbed: sites
+        mostStabbed: sites,
+        bookmarkletcode: bookmarklet.code
       });
     });
 };
