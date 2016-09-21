@@ -34,6 +34,8 @@ function postCanvasToURL(url, canvas, text, callback) {
   var siteUrl = window.location.href;
   if (siteUrl.indexOf(backstabFrameUrlRoot) === 0) {
     siteUrl = siteUrl.substr(backstabFrameUrlRoot.length);
+  } else {
+    siteUrl = escape(siteUrl);
   }
 
   var xhr = new XMLHttpRequest();
@@ -60,7 +62,7 @@ function postCanvasToURL(url, canvas, text, callback) {
     'Content-Disposition: form-data; name="sitename"',
     'Content-Type: text/plain',
     '',
-    escape(siteUrl),
+    siteUrl,
     '--' + boundary,
     'Content-Disposition: form-data; name="shot"; filename="screenshot.png"',
     'Content-Type: image/png',
