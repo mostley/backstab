@@ -8,9 +8,9 @@ block content
         p.lead What people think about this page
       .col-sm-6
         if site.stabs.length <= 0
-          a.btn.btn-default.pull-right(href='/sites/' + sitename + '/backstab') Stab this!
+          a.btn.btn-default.pull-right(href='/sites/' + encodeURIComponent(sitename) + '/backstab') Stab this!
         else
-          a.btn.btn-default.pull-right(href='/sites/' + sitename + '/backstab') Stab this some more!
+          a.btn.btn-default.pull-right(href='/sites/' + encodeURIComponent(sitename) + '/backstab') Stab this some more!
   hr
   .row
     .col-sm-12
@@ -20,14 +20,14 @@ block content
             .col-sm-6.col-md-4
               .thumbnail
                 if stab.shot
-                  a(data-toggle='lightbox', href='/screenshot/' + stab.shot, data-title='Screenshot', data-type='image')
-                    img(src='/screenshot/' + stab.shot, alt='Click to magnify')
+                  a(data-toggle='lightbox', href='/screenshot/' + encodeURIComponent(stab.shot), data-title='Screenshot', data-type='image')
+                    img(src='/screenshot/' + encodeURIComponent(stab.shot), alt='Click to magnify')
                 else
                   img(src='http://placehold.it/350x150?text=<here could be your screenshot>', alt='Screenshot placeholder')
                 .caption
                   h4.short-stab(title=stab.text) #{stab.text}
                   hr
-                  a.btn.btn-primary(href='/sites/' + sitename + '/stabs/' + stab.id, role='button') Stab the stabber!
+                  a.btn.btn-primary(href='/sites/' + encodeURIComponent(sitename) + '/stabs/' + encodeURIComponent(stab.id), role='button') Stab the stabber!
         else
           no stabs yet
       else

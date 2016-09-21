@@ -62,7 +62,7 @@ exports.backstabSite = (req, res, next) => {
   if (!req.body.text || !req.file) {
     if (wasInPage) {
       req.flash('errors', { msg: 'Nope, didn\'t work.' });
-      res.redirect('/sites/' + sitename);
+      res.redirect('/sites/' + encodeURIComponent(sitename));
     } else {
       res.sendStatus(400);
     }
@@ -82,7 +82,7 @@ exports.backstabSite = (req, res, next) => {
 
       if (wasInPage) {
         req.flash('error', { msg: 'Site was not successfully backstabbed.' });
-        res.redirect('/sites/' + sitename);
+        res.redirect('/sites/' + encodeURIComponent(sitename));
       } else {
         res.sendStatus(500);
       }
@@ -91,7 +91,7 @@ exports.backstabSite = (req, res, next) => {
 
     if (wasInPage) {
       req.flash('success', { msg: 'Site was successfully backstabbed.' });
-      res.redirect('/sites/' + sitename);
+      res.redirect('/sites/' + encodeURIComponent(sitename));
     } else {
       res.sendStatus(200);
     }

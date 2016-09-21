@@ -17,7 +17,7 @@ block content
     each site in mostStabbed
       - var stabIndex = Math.floor(Math.random() * site.stabs.length)
       .col-sm-6
-        a.text-muted(href='/sites/' + site.url)
+        a.text-muted(href='/sites/' + encodeURIComponent(site.url))
           h2 #{site.url} was stabbed #{site.stabs.length} times
         .row
           if site.stabs[stabIndex].shot
@@ -26,8 +26,8 @@ block content
                 img(src='/screenshot/' + site.stabs[stabIndex].shot)
             .col-sm-8
               p.short-stab(title=site.stabs[stabIndex].text) #{site.stabs[stabIndex].text}
-              p: a.btn.btn-default(href='/sites/' + site.url, role='button') View the gruelsome details »
+              p: a.btn.btn-default(href='/sites/' + encodeURIComponent(site.url), role='button') View the gruelsome details »
           else
             .col-sm-12
               p.short-stab #{site.stabs[stabIndex].text}
-              p: a.btn.btn-default(href='/sites/' + site.url, role='button') View the gruelsome details »
+              p: a.btn.btn-default(href='/sites/' + encodeURIComponent(site.url), role='button') View the gruelsome details »
