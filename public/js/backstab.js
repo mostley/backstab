@@ -68,7 +68,7 @@ function sendPost(url, data, callback) {
   http.send(JSON.stringify(data));
 }
 
-var backstabUrl = 'http://localhost:3000/api/sites'
+var backstabUrl = 'http://backstab.us/api/sites'
 
 function addStyles() {
   var styleElement = document.createElement('style');
